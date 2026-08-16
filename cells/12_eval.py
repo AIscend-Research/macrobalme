@@ -36,6 +36,21 @@ for name in DESIGNS:
           f"(worst choice: {100*best.min()/BASE[name].drc:+.1f}%)")
 print(f"ECO ground truth: {time.time()-t0:.0f}s\n")
 
+def surrogate_effect(name):
+    """The amortised but-for effect: how much would the surrogate's DRC drop if this macro made
+    its best available ECO move? The simplest causal ranking there is, and the one the paper's
+    surrogate is built to serve."""
+    d = DESIGNS[name]
+    b = v_hat(name, d.base_sites)[0]
+    out = np.zeros(d.NM)
+    for m in range(d.NM):
+        cf = np.stack([np.concatenate([d.base_sites[:m], s[None], d.base_sites[m + 1:]])
+                       for s in LOCAL_SITES[name][m]])
+        out[m] = b - v_hat_batch(name, cf)[:, 0].min()
+    return out
+
+
+SURR_EFFECT = {n: surrogate_effect(n) for n in DESIGNS}
 _rng = np.random.default_rng(CFG.seed + 31)
 METHOD_SPEC = [
     # label,                group,       f(name) -> per-macro score,                 oracle calls at query time
@@ -43,6 +58,7 @@ METHOD_SPEC = [
     ("HP blame",           "causal",    lambda n: HP[n]["blame"][:, 0],              0),
     ("Prob. of necessity", "causal",    lambda n: HP[n]["PN"][:, 0],                 0),
     ("Shapley value",      "causal",    lambda n: SHAP[n],                           0),
+    ("Counterfactual dDRC","causal",    lambda n: SURR_EFFECT[n],                    0),
     ("Pigou externality",  "economic",  lambda n: PRICE[n]["pigou"],                 lambda n: DESIGNS[n].NM),
     ("Shadow price",       "economic",  lambda n: PRICE[n]["dual"],                  0),
     ("Grad-CAM",           "saliency",  lambda n: SAL[n]["gradcam"],                 0),

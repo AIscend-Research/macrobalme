@@ -16,7 +16,7 @@ plt.rcParams.update({
     "xtick.color": INK2, "ytick.color": INK2, "font.size": 9,
     "axes.spines.top": False, "axes.spines.right": False,
     "axes.grid": True, "grid.color": GRIDC, "grid.linewidth": 0.7,
-    "legend.frameon": False, "figure.dpi": 130, "savefig.bbox": "tight",
+    "axes.axisbelow": True, "legend.frameon": False, "figure.dpi": 130, "savefig.bbox": "tight",
 })
 
 CMAP_CONG = mcolors.LinearSegmentedColormap.from_list(

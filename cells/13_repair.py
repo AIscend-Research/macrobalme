@@ -21,11 +21,19 @@ def _sites_for(name, xy, m, n=None):
     return ok if n is None else ok[:n]
 
 
+VERIFY_SITES = 3
+
+
 def choose_site_surrogate(name, xy, m):
-    """Common rule: among legal sites, take the one the surrogate says is best."""
+    """Common rule, and the loop the paper argues for: shortlist with the surrogate, then spend
+    a fixed budget of REAL place-and-route runs to pick among the shortlist. Every method gets
+    the same shortlist size and the same verification budget, so the only thing that varies
+    between rows of the table is *which macro was blamed*."""
     S = _sites_for(name, xy, m)
     cfgs = np.stack([np.concatenate([xy[:m], s[None], xy[m + 1:]]) for s in S])
-    return S[int(np.argmin(v_hat_batch(name, cfgs)[:, 0]))]
+    top = np.argsort(v_hat_batch(name, cfgs)[:, 0])[:VERIFY_SITES]
+    drc = [ORACLES[name].evaluate(cfgs[j]).drc for j in top]
+    return S[int(top[int(np.argmin(drc))])]
 
 
 def choose_site_price(name, xy, m, res):
@@ -79,7 +87,7 @@ for name in DESIGNS:
     # the control gets several draws, so it is not judged on one lucky order
     ranked["Random"] = [np.random.default_rng(CFG.seed + 500 + i).permutation(DESIGNS[name].NM)
                         for i in range(5)]
-    ranked["Oracle upper bound"] = [np.argsort(-GT[name]["delta_local"])]
+    ranked["Oracle-ranked (ground truth)"] = [np.argsort(-GT[name]["delta_local"])]
     for meth, orders in ranked.items():
         for rep, order in enumerate(orders):
             xyA, trA = repair(name, order, CFG.repair_topk, "surrogate")
