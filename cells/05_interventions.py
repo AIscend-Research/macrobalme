@@ -38,8 +38,11 @@ def overlaps(xy, wh, i, j, gap=8.0):
             abs(xy[i, 1] - xy[j, 1]) < (wh[i, 1] + wh[j, 1]) / 2 + gap)
 
 
-def candidate_sites(d: Design, xy: np.ndarray, m: int, k: int = 24, rng=None, lattice=7):
-    """Legal alternative sites for macro m, holding every other macro where it is."""
+def candidate_sites(d: Design, xy: np.ndarray, m: int, k: int = 24, rng=None, lattice=7,
+                    radius: float = None):
+    """Legal alternative sites for macro m, holding every other macro where it is. `radius`
+    restricts to an ECO-sized local move, which is what a designer can actually afford late in
+    the flow -- and it is what makes *which macro you move* matter."""
     rng = rng or np.random.default_rng(0)
     w, h = d.macro_wh[m]
     gx = np.linspace(w / 2 + 10, d.die - w / 2 - 10, lattice)
@@ -52,6 +55,9 @@ def candidate_sites(d: Design, xy: np.ndarray, m: int, k: int = 24, rng=None, la
         if all(not overlaps(t, d.macro_wh, m, j) for j in range(d.NM) if j != m):
             ok.append(c)
     ok = np.array(ok) if ok else d.null_sites[m:m + 1]
+    if radius is not None:
+        near = ok[np.linalg.norm(ok - xy[m], axis=1) <= radius]
+        ok = near if len(near) >= 3 else ok[np.argsort(np.linalg.norm(ok - xy[m], axis=1))[:6]]
     if len(ok) > k: ok = ok[rng.choice(len(ok), k, replace=False)]
     return ok
 
@@ -122,6 +128,18 @@ def build_interventions(name: str, n: int, seed: int):
             run(xy, "mixed", list(S), off)
     return pd.DataFrame(rows), np.stack(maps), np.stack(XY)
 
+
+# The designer's actual action set late in the flow: an ECO-sized relocation of one macro.
+# Every method is offered exactly this set, and the causal contrasts below are defined over it,
+# because a cause you cannot act on is a cause you cannot use.
+ECO_RADIUS = {n: 0.20 * DESIGNS[n].die for n in DESIGNS}
+LOCAL_SITES = {n: {m: candidate_sites(DESIGNS[n], DESIGNS[n].base_sites, m,
+                                      k=CFG.repair_candidates, lattice=11,
+                                      rng=np.random.default_rng(CFG.seed + 41 + m),
+                                      radius=ECO_RADIUS[n])
+                   for m in range(DESIGNS[n].NM)} for n in DESIGNS}
+print("ECO candidate sites per macro:",
+      {n: [len(LOCAL_SITES[n][m]) for m in LOCAL_SITES[n]] for n in LOCAL_SITES})
 
 DATA: Dict[str, dict] = {}
 t0 = time.time()

@@ -11,9 +11,14 @@
 #     price has a gradient, saliency only has "move it away from the bright pixels".
 
 def _sites_for(name, xy, m, n=None):
-    n = n or CFG.repair_candidates
-    return candidate_sites(name and DESIGNS[name], xy, m,
-                           k=n, rng=np.random.default_rng(CFG.seed + 41 + m))
+    """One fixed ECO-sized candidate set per macro, shared by every method, so no method wins
+    by being handed better destinations."""
+    S = LOCAL_SITES[name][m]
+    ok = np.array([s for s in S if all(not overlaps(np.concatenate([xy[:m], s[None], xy[m + 1:]]),
+                                                    DESIGNS[name].macro_wh, m, j)
+                                       for j in range(DESIGNS[name].NM) if j != m)])
+    if not len(ok): ok = S[:1]
+    return ok if n is None else ok[:n]
 
 
 def choose_site_surrogate(name, xy, m):
@@ -24,7 +29,16 @@ def choose_site_surrogate(name, xy, m):
 
 
 def choose_site_price(name, xy, m, res):
-    S, ext, priv = price_field(name, m, res)
+    """The price-native edit: the same ECO candidate set, ranked by first-order social cost."""
+    S = _sites_for(name, xy, m)
+    o = ORACLES[name]
+    ext = np.array([float((res.lam * o.macro_cover_one(
+        np.concatenate([xy[:m], s[None], xy[m + 1:]]), m)).sum()) for s in S]) * o.base_cap * 1.84
+    anc = _net_anchor(name, res, m)
+    mid = (S[:, None, :] + anc[None, :, :]) / 2
+    gi = np.clip((mid / o.gs).astype(int), 0, o.G - 1)
+    priv = ((np.abs(S[:, None, :] - anc[None, :, :]).sum(-1) / o.gs)
+            * (1.0 + res.lam[gi[..., 1], gi[..., 0]])).sum(1)
     return S[int(np.argmin(ext + priv))]
 
 
@@ -65,7 +79,7 @@ for name in DESIGNS:
     # the control gets several draws, so it is not judged on one lucky order
     ranked["Random"] = [np.random.default_rng(CFG.seed + 500 + i).permutation(DESIGNS[name].NM)
                         for i in range(5)]
-    ranked["Oracle upper bound"] = [np.argsort(-GT[name]["delta_all"])]
+    ranked["Oracle upper bound"] = [np.argsort(-GT[name]["delta_local"])]
     for meth, orders in ranked.items():
         for rep, order in enumerate(orders):
             xyA, trA = repair(name, order, CFG.repair_topk, "surrogate")

@@ -21,13 +21,14 @@ def config_from_mask(name, on_mask):
     return np.where(np.asarray(on_mask, bool)[:, None], d.base_sites, d.null_sites)
 
 
-def alt_sites(name, k=2):
-    d = DESIGNS[name]
-    rng = np.random.default_rng(CFG.seed + 3)
-    return {m: candidate_sites(d, d.base_sites, m, k=k, rng=rng) for m in range(d.NM)}
-
-
-ALT = {n: alt_sites(n) for n in DESIGNS}
+# X_m ranges over the sites the designer can actually put macro m at: its default peripheral
+# slot, or any ECO-sized relocation. HP quantifies over the alternative settings of the
+# variable, so this action set *is* the contrast set -- both for "would it have happened but
+# for M3" and for the witness sets W.
+NALT = 3
+CONTRAST = {n: {m: np.concatenate([DESIGNS[n].null_sites[m][None], LOCAL_SITES[n][m][:NALT]])
+                for m in range(DESIGNS[n].NM)} for n in DESIGNS}
+ALT = {n: {m: CONTRAST[n][m][1:] for m in CONTRAST[n]} for n in DESIGNS}
 BASE_OUT = {n: np.array([BASE[n].drc] + [float(BASE[n].hotspot[r["mask"]].sum())
                                          for r in REGIONS[n]] + [0.0] * 3)[:4] for n in DESIGNS}
 THRESH = {n: np.array([TAU_ALL, TAU_REGION, TAU_REGION, TAU_REGION]) * BASE_OUT[n]
@@ -61,9 +62,11 @@ def necessity_sufficiency(name):
     on_holds = phi(name, p_on)                                # (K, 4)
     PN = np.zeros((d.NM, 4)); PS = np.zeros((d.NM, 4)); PNS = np.zeros((d.NM, 4))
     for m in range(d.NM):
-        # --- PN: in contexts where the violation is present, does moving m away kill it? ---
-        off = ctx.copy(); off[:, m] = d.null_sites[m]
-        p_off = v_hat_batch(name, off)
+        # --- PN: in contexts where the violation is present, is there an available move for m
+        #     that kills it?  (the minimum over m's action set -- necessity you can act on) ---
+        p_off = np.min(np.stack([v_hat_batch(name, np.concatenate(
+            [ctx[:, :m], np.repeat(c[None, None], len(ctx), 0), ctx[:, m + 1:]], 1))
+            for c in CONTRAST[name][m]]), 0)
         killed = on_holds & ~phi(name, p_off)
         PN[m] = killed.sum(0) / np.maximum(on_holds.sum(0), 1)
         PNS[m] = killed.mean(0)
@@ -89,7 +92,7 @@ def responsibility(name, xy_actual=None, kmax=None, budget=4000):
     kmax = CFG.resp_max_witness if kmax is None else kmax
     rng = np.random.default_rng(CFG.seed + 7)
     xy0 = d.base_sites if xy_actual is None else xy_actual
-    settings = {j: np.concatenate([d.null_sites[j][None], ALT[name][j]]) for j in range(d.NM)}
+    settings = CONTRAST[name]
     resp = np.zeros((d.NM, 4)); frac = np.zeros((d.NM, 4)); wit = [[None] * 4 for _ in range(d.NM)]
     for m in range(d.NM):
         others = [j for j in range(d.NM) if j != m]
@@ -108,8 +111,10 @@ def responsibility(name, xy_actual=None, kmax=None, budget=4000):
                     cfgs.append(x); meta.append((W, ch))
             cfgs = np.stack(cfgs)
             keep = phi(name, v_hat_batch(name, cfgs))                     # AC2(a): phi survives
-            flip = cfgs.copy(); flip[:, m] = d.null_sites[m]
-            gone = ~phi(name, v_hat_batch(name, flip))                    # AC2(b): m is pivotal
+            gone = np.zeros_like(keep)                                    # AC2(b): m is pivotal
+            for c in settings[m]:                                         # under *some* move of m
+                flip = cfgs.copy(); flip[:, m] = c
+                gone |= ~phi(name, v_hat_batch(name, flip))
             piv = keep & gone
             for o in range(4):
                 if not done[o] and piv[:, o].any():

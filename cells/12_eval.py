@@ -17,6 +17,25 @@ for name in DESIGNS:
     print(f"{name:11s} true effect of removing each macro (DRC markers): " +
           "  ".join(f"{d.macro_names[m]} {dall[m]:+.0f}" for m in np.argsort(-dall)))
 
+# The ECO ground truth: for every macro, the best *local* move the tool actually rewards.
+# One real place-and-route run per candidate site -- expensive, and the only honest referee.
+t0 = time.time()
+for name in DESIGNS:
+    d, o = DESIGNS[name], ORACLES[name]
+    best = np.zeros(d.NM); bsite = np.zeros((d.NM, 2))
+    for m in range(d.NM):
+        vals = []
+        for s in LOCAL_SITES[name][m]:
+            xy = d.base_sites.copy(); xy[m] = s
+            vals.append(o.evaluate(xy).drc)
+        j = int(np.argmin(vals))
+        best[m] = BASE[name].drc - vals[j]; bsite[m] = LOCAL_SITES[name][m][j]
+    GT[name]["delta_local"] = best; GT[name]["best_site"] = bsite
+    print(f"{name:11s} best single ECO move: {d.macro_names[int(np.argmax(best))]} "
+          f"-> {100*best.max()/BASE[name].drc:.1f}% fewer DRC markers "
+          f"(worst choice: {100*best.min()/BASE[name].drc:+.1f}%)")
+print(f"ECO ground truth: {time.time()-t0:.0f}s\n")
+
 _rng = np.random.default_rng(CFG.seed + 31)
 METHOD_SPEC = [
     # label,                group,       f(name) -> per-macro score,                 oracle calls at query time
@@ -45,11 +64,13 @@ for name in DESIGNS:
     for k in METHODS:
         rows.append(dict(design=name, method=k, group=GROUP[k],
                          rho_total=spearman(SCORES[name][k], GT[name]["delta_all"]),
+                         rho_local=spearman(SCORES[name][k], GT[name]["delta_local"]),
                          rho_region=float(np.mean([spearman(SCORES[name][k],
                                                             GT[name]["delta_region"][:, r])
                                                    for r in range(len(REGIONS[name]))]))))
 RANK_DF = pd.DataFrame(rows)
-piv = RANK_DF.pivot_table(index="method", values=["rho_total", "rho_region"], aggfunc="mean")
+piv = RANK_DF.pivot_table(index="method", values=["rho_total", "rho_local", "rho_region"],
+                          aggfunc="mean")
 piv["group"] = [GROUP[m] for m in piv.index]
 print("\nrank correlation with the tool's own but-for effects (mean over designs)")
 print(piv.sort_values("rho_total", ascending=False).round(3).to_string())
