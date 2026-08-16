@@ -93,6 +93,15 @@ def build_interventions(name: str, n: int, seed: int):
         xy = base.copy(); xy[m] = null[m]
         off = np.zeros(d.NM, bool); off[m] = True
         run(xy, "single_off", [m], off)
+    # (a2) ECO-sized single-macro moves -- the action space the attributions must rank.
+    #      These are *different draws* from the same radius as the evaluation candidate set,
+    #      so the surrogate learns the local response surface without ever seeing the sites it
+    #      will later be tested on.
+    for m in range(d.NM):
+        for _ in range(6 if not QUICK else 4):
+            c = _jitter(d, base, m, rng, scale=0.09)
+            xy = base.copy(); xy[m] = c
+            run(xy, "eco_move", [m], np.zeros(d.NM, bool))
     # (b) exhaustive single-macro relocation to a lattice of legal sites
     for m in range(d.NM):
         for c in candidate_sites(d, base, m, k=4, rng=rng):

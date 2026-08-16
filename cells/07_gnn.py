@@ -40,9 +40,15 @@ def gnn_features(name: str, macro_xy: np.ndarray):
     # crowding: how much macro area sits within 0.2 die of me
     D = np.linalg.norm(xy[:, None] - xy[None, :], axis=-1) + np.eye(NM) * 9
     crowd = ((wh.prod(1)[None, :] * np.exp(-(D / 0.18) ** 2)).sum(1))
-    f = np.stack([xy[:, 0], xy[:, 1], wh[:, 0], wh[:, 1], deg, off, dsp[:, 0], dsp[:, 1],
-                  ctr, crowd, np.linalg.norm(xy - null, axis=1),
-                  np.full(NM, NM / NMAX), np.full(NM, d.NNET / 6000.0)], 1)
+    # Fourier position features: a plain MLP is too smooth to feel a 10%-of-die ECO move,
+    # and the DRC response to one is not smooth at all.
+    freqs = np.array([1.0, 2.0, 4.0, 8.0])
+    ff = np.concatenate([np.sin(2 * np.pi * xy[:, :, None] * freqs).reshape(NM, -1),
+                         np.cos(2 * np.pi * xy[:, :, None] * freqs).reshape(NM, -1)], 1)
+    f = np.concatenate([np.stack([xy[:, 0], xy[:, 1], wh[:, 0], wh[:, 1], deg, off, dsp[:, 0],
+                                  dsp[:, 1], ctr, crowd, np.linalg.norm(xy - null, axis=1),
+                                  np.full(NM, NM / NMAX), np.full(NM, d.NNET / 6000.0)], 1),
+                        ff], 1)
     A = NETSHARE[name] + np.exp(-(D / 0.22) ** 2) * (1 - np.eye(NM))
     A = A / np.maximum(A.sum(1, keepdims=True), 1e-9)
     F_ = np.zeros((NMAX, f.shape[1]), np.float32); F_[:NM] = f
