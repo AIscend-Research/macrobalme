@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="980" height="426" viewBox="0 0 980 426" font-family="DejaVu Sans, Helvetica, Arial, sans-serif">
-<rect width="980" height="426" fill="#fcfcfb"/>
-<text x="34" y="52" font-size="27" font-weight="bold" fill="#0b0b0b">Attribution of responsibility &#8212; aes_like</text>
-<text x="34" y="78" font-size="15" fill="#52514e">outcome under consideration: signoff failure (total DRC), 383 markers in 120 GCells</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="656" viewBox="0 0 980 656" font-family="DejaVu Sans, Helvetica, Arial, sans-serif">
+<rect width="980" height="656" fill="#fcfcfb"/>
+<text x="34" y="52" font-size="27" font-weight="bold" fill="#0b0b0b">Attribution of responsibility &#8212; jpeg_like</text>
+<text x="34" y="78" font-size="15" fill="#52514e">outcome under consideration: signoff failure (total DRC), 431 markers in 166 GCells</text>
 <text x="34" y="112" font-size="12.5" fill="#8b8a84" letter-spacing="0.06em">MACRO</text>
 <text x="150" y="112" font-size="12.5" fill="#8b8a84" letter-spacing="0.06em">HP RESPONSIBILITY</text>
 <text x="400" y="112" font-size="12.5" fill="#8b8a84" letter-spacing="0.06em">PN</text>
@@ -10,65 +10,115 @@
 <text x="660" y="112" font-size="12.5" fill="#8b8a84" letter-spacing="0.06em">CONGESTION PRICE</text>
 <text x="800" y="112" font-size="12.5" fill="#8b8a84" letter-spacing="0.06em">VERDICT</text>
 <line x1="34" y1="120" x2="946" y2="120" stroke="#e6e5e0" stroke-width="1.5"/>
-<text x="34" y="155" font-size="17" font-weight="bold" fill="#0b0b0b">M0</text>
+<text x="34" y="155" font-size="17" font-weight="bold" fill="#0b0b0b">M7</text>
 <rect x="150" y="138" width="220.0" height="17" rx="4" fill="#2a78d6"/>
 <rect x="150" y="138" width="220" height="17" rx="4" fill="none" stroke="#e6e5e0"/>
 <text x="378" y="152" font-size="12" fill="#52514e" text-anchor="end">1.00</text>
-<text x="400" y="152" font-size="13" fill="#0b0b0b">1.00</text>
-<text x="470" y="152" font-size="13" fill="#0b0b0b">0.14</text>
-<text x="545" y="152" font-size="13" fill="#0b0b0b">+4.6</text>
-<rect x="660" y="140" width="63.5" height="13" rx="3" fill="#eb6834" opacity="0.85"/>
+<text x="400" y="152" font-size="13" fill="#0b0b0b">0.92</text>
+<text x="470" y="152" font-size="13" fill="#0b0b0b">0.64</text>
+<text x="545" y="152" font-size="13" fill="#0b0b0b">+92.2</text>
+<rect x="660" y="140" width="19.3" height="13" rx="3" fill="#eb6834" opacity="0.85"/>
 <text x="800" y="152" font-size="13.5" fill="#008300">necessary cause</text>
 <line x1="34" y1="172" x2="946" y2="172" stroke="#e6e5e0"/>
-<text x="34" y="201" font-size="17" font-weight="bold" fill="#0b0b0b">M3</text>
-<rect x="150" y="184" width="220.0" height="17" rx="4" fill="#2a78d6"/>
+<text x="34" y="201" font-size="17" font-weight="bold" fill="#0b0b0b">M2</text>
+<rect x="150" y="184" width="70.1" height="17" rx="4" fill="#2a78d6"/>
 <rect x="150" y="184" width="220" height="17" rx="4" fill="none" stroke="#e6e5e0"/>
-<text x="378" y="198" font-size="12" fill="#52514e" text-anchor="end">1.00</text>
-<text x="400" y="198" font-size="13" fill="#0b0b0b">1.00</text>
-<text x="470" y="198" font-size="13" fill="#0b0b0b">0.10</text>
-<text x="545" y="198" font-size="13" fill="#0b0b0b">+1.2</text>
-<rect x="660" y="186" width="94.7" height="13" rx="3" fill="#eb6834" opacity="0.85"/>
-<text x="800" y="198" font-size="13.5" fill="#008300">necessary cause</text>
+<text x="378" y="198" font-size="12" fill="#52514e" text-anchor="end">0.50</text>
+<text x="400" y="198" font-size="13" fill="#0b0b0b">0.42</text>
+<text x="470" y="198" font-size="13" fill="#0b0b0b">0.24</text>
+<text x="545" y="198" font-size="13" fill="#0b0b0b">+16.8</text>
+<rect x="660" y="186" width="90.8" height="13" rx="3" fill="#eb6834" opacity="0.85"/>
+<text x="800" y="198" font-size="13.5" fill="#eb6834">contributing cause</text>
 <line x1="34" y1="218" x2="946" y2="218" stroke="#e6e5e0"/>
-<text x="34" y="247" font-size="17" font-weight="bold" fill="#0b0b0b">M4</text>
-<rect x="150" y="230" width="220.0" height="17" rx="4" fill="#2a78d6"/>
+<text x="34" y="247" font-size="17" font-weight="bold" fill="#0b0b0b">M10</text>
+<rect x="150" y="230" width="70.1" height="17" rx="4" fill="#2a78d6"/>
 <rect x="150" y="230" width="220" height="17" rx="4" fill="none" stroke="#e6e5e0"/>
-<text x="378" y="244" font-size="12" fill="#52514e" text-anchor="end">1.00</text>
-<text x="400" y="244" font-size="13" fill="#0b0b0b">1.00</text>
-<text x="470" y="244" font-size="13" fill="#0b0b0b">0.11</text>
-<text x="545" y="244" font-size="13" fill="#0b0b0b">+54.8</text>
-<rect x="660" y="232" width="110.0" height="13" rx="3" fill="#eb6834" opacity="0.85"/>
-<text x="800" y="244" font-size="13.5" fill="#008300">necessary cause</text>
+<text x="378" y="244" font-size="12" fill="#52514e" text-anchor="end">0.50</text>
+<text x="400" y="244" font-size="13" fill="#0b0b0b">0.29</text>
+<text x="470" y="244" font-size="13" fill="#0b0b0b">0.17</text>
+<text x="545" y="244" font-size="13" fill="#0b0b0b">+14.7</text>
+<rect x="660" y="232" width="107.1" height="13" rx="3" fill="#eb6834" opacity="0.85"/>
+<text x="800" y="244" font-size="13.5" fill="#eb6834">contributing cause</text>
 <line x1="34" y1="264" x2="946" y2="264" stroke="#e6e5e0"/>
-<text x="34" y="293" font-size="17" font-weight="bold" fill="#0b0b0b">M5</text>
-<rect x="150" y="276" width="220.0" height="17" rx="4" fill="#2a78d6"/>
+<text x="34" y="293" font-size="17" font-weight="bold" fill="#0b0b0b">M8</text>
+<rect x="150" y="276" width="61.9" height="17" rx="4" fill="#2a78d6"/>
 <rect x="150" y="276" width="220" height="17" rx="4" fill="none" stroke="#e6e5e0"/>
-<text x="378" y="290" font-size="12" fill="#52514e" text-anchor="end">1.00</text>
-<text x="400" y="290" font-size="13" fill="#0b0b0b">0.91</text>
-<text x="470" y="290" font-size="13" fill="#0b0b0b">0.06</text>
-<text x="545" y="290" font-size="13" fill="#0b0b0b">+36.0</text>
-<rect x="660" y="278" width="104.6" height="13" rx="3" fill="#eb6834" opacity="0.85"/>
-<text x="800" y="290" font-size="13.5" fill="#008300">necessary cause</text>
+<text x="378" y="290" font-size="12" fill="#52514e" text-anchor="end">0.50</text>
+<text x="400" y="290" font-size="13" fill="#0b0b0b">0.25</text>
+<text x="470" y="290" font-size="13" fill="#0b0b0b">0.11</text>
+<text x="545" y="290" font-size="13" fill="#0b0b0b">-2.9</text>
+<rect x="660" y="278" width="110.0" height="13" rx="3" fill="#eb6834" opacity="0.85"/>
+<text x="800" y="290" font-size="13.5" fill="#8b8a84">not a cause</text>
 <line x1="34" y1="310" x2="946" y2="310" stroke="#e6e5e0"/>
-<text x="34" y="339" font-size="17" font-weight="bold" fill="#0b0b0b">M2</text>
-<rect x="150" y="322" width="71.5" height="17" rx="4" fill="#2a78d6"/>
+<text x="34" y="339" font-size="17" font-weight="bold" fill="#0b0b0b">M5</text>
+<rect x="150" y="322" width="60.5" height="17" rx="4" fill="#2a78d6"/>
 <rect x="150" y="322" width="220" height="17" rx="4" fill="none" stroke="#e6e5e0"/>
 <text x="378" y="336" font-size="12" fill="#52514e" text-anchor="end">0.50</text>
-<text x="400" y="336" font-size="13" fill="#0b0b0b">0.55</text>
-<text x="470" y="336" font-size="13" fill="#0b0b0b">0.04</text>
-<text x="545" y="336" font-size="13" fill="#0b0b0b">+0.7</text>
-<rect x="660" y="324" width="56.0" height="13" rx="3" fill="#eb6834" opacity="0.85"/>
-<text x="800" y="336" font-size="13.5" fill="#eb6834">contributing cause</text>
+<text x="400" y="336" font-size="13" fill="#0b0b0b">0.08</text>
+<text x="470" y="336" font-size="13" fill="#0b0b0b">0.06</text>
+<text x="545" y="336" font-size="13" fill="#0b0b0b">-34.3</text>
+<rect x="660" y="324" width="0.0" height="13" rx="3" fill="#eb6834" opacity="0.85"/>
+<text x="800" y="336" font-size="13.5" fill="#8b8a84">not a cause</text>
 <line x1="34" y1="356" x2="946" y2="356" stroke="#e6e5e0"/>
 <text x="34" y="385" font-size="17" font-weight="bold" fill="#0b0b0b">M1</text>
-<rect x="150" y="368" width="68.8" height="17" rx="4" fill="#2a78d6"/>
+<rect x="150" y="368" width="59.1" height="17" rx="4" fill="#2a78d6"/>
 <rect x="150" y="368" width="220" height="17" rx="4" fill="none" stroke="#e6e5e0"/>
 <text x="378" y="382" font-size="12" fill="#52514e" text-anchor="end">0.50</text>
-<text x="400" y="382" font-size="13" fill="#0b0b0b">0.64</text>
-<text x="470" y="382" font-size="13" fill="#0b0b0b">0.02</text>
-<text x="545" y="382" font-size="13" fill="#0b0b0b">-9.4</text>
-<rect x="660" y="370" width="0.0" height="13" rx="3" fill="#eb6834" opacity="0.85"/>
-<text x="800" y="382" font-size="13.5" fill="#008300">necessary cause</text>
+<text x="400" y="382" font-size="13" fill="#0b0b0b">0.04</text>
+<text x="470" y="382" font-size="13" fill="#0b0b0b">0.06</text>
+<text x="545" y="382" font-size="13" fill="#0b0b0b">-23.3</text>
+<rect x="660" y="370" width="2.2" height="13" rx="3" fill="#eb6834" opacity="0.85"/>
+<text x="800" y="382" font-size="13.5" fill="#8b8a84">not a cause</text>
 <line x1="34" y1="402" x2="946" y2="402" stroke="#e6e5e0"/>
-<text x="34" y="410" font-size="11.5" fill="#8b8a84">PN = probability of necessity, PS = probability of sufficiency, both over the designer's action set; responsibility = 1/(1+|W|) for the smallest witness coalition W; price in units of routing cost imposed on other nets.</text>
+<text x="34" y="431" font-size="17" font-weight="bold" fill="#0b0b0b">M4</text>
+<rect x="150" y="414" width="57.8" height="17" rx="4" fill="#2a78d6"/>
+<rect x="150" y="414" width="220" height="17" rx="4" fill="none" stroke="#e6e5e0"/>
+<text x="378" y="428" font-size="12" fill="#52514e" text-anchor="end">0.50</text>
+<text x="400" y="428" font-size="13" fill="#0b0b0b">0.04</text>
+<text x="470" y="428" font-size="13" fill="#0b0b0b">0.27</text>
+<text x="545" y="428" font-size="13" fill="#0b0b0b">+6.2</text>
+<rect x="660" y="416" width="31.2" height="13" rx="3" fill="#eb6834" opacity="0.85"/>
+<text x="800" y="428" font-size="13.5" fill="#8b8a84">not a cause</text>
+<line x1="34" y1="448" x2="946" y2="448" stroke="#e6e5e0"/>
+<text x="34" y="477" font-size="17" font-weight="bold" fill="#0b0b0b">M9</text>
+<rect x="150" y="460" width="57.8" height="17" rx="4" fill="#2a78d6"/>
+<rect x="150" y="460" width="220" height="17" rx="4" fill="none" stroke="#e6e5e0"/>
+<text x="378" y="474" font-size="12" fill="#52514e" text-anchor="end">0.50</text>
+<text x="400" y="474" font-size="13" fill="#0b0b0b">0.00</text>
+<text x="470" y="474" font-size="13" fill="#0b0b0b">0.06</text>
+<text x="545" y="474" font-size="13" fill="#0b0b0b">+22.3</text>
+<rect x="660" y="462" width="33.7" height="13" rx="3" fill="#eb6834" opacity="0.85"/>
+<text x="800" y="474" font-size="13.5" fill="#8b8a84">not a cause</text>
+<line x1="34" y1="494" x2="946" y2="494" stroke="#e6e5e0"/>
+<text x="34" y="523" font-size="17" font-weight="bold" fill="#0b0b0b">M0</text>
+<rect x="150" y="506" width="56.4" height="17" rx="4" fill="#2a78d6"/>
+<rect x="150" y="506" width="220" height="17" rx="4" fill="none" stroke="#e6e5e0"/>
+<text x="378" y="520" font-size="12" fill="#52514e" text-anchor="end">0.50</text>
+<text x="400" y="520" font-size="13" fill="#0b0b0b">0.00</text>
+<text x="470" y="520" font-size="13" fill="#0b0b0b">0.11</text>
+<text x="545" y="520" font-size="13" fill="#0b0b0b">+6.2</text>
+<rect x="660" y="508" width="61.5" height="13" rx="3" fill="#eb6834" opacity="0.85"/>
+<text x="800" y="520" font-size="13.5" fill="#8b8a84">not a cause</text>
+<line x1="34" y1="540" x2="946" y2="540" stroke="#e6e5e0"/>
+<text x="34" y="569" font-size="17" font-weight="bold" fill="#0b0b0b">M3</text>
+<rect x="150" y="552" width="38.3" height="17" rx="4" fill="#2a78d6"/>
+<rect x="150" y="552" width="220" height="17" rx="4" fill="none" stroke="#e6e5e0"/>
+<text x="378" y="566" font-size="12" fill="#52514e" text-anchor="end">0.33</text>
+<text x="400" y="566" font-size="13" fill="#0b0b0b">0.04</text>
+<text x="470" y="566" font-size="13" fill="#0b0b0b">0.00</text>
+<text x="545" y="566" font-size="13" fill="#0b0b0b">-8.0</text>
+<rect x="660" y="554" width="9.2" height="13" rx="3" fill="#eb6834" opacity="0.85"/>
+<text x="800" y="566" font-size="13.5" fill="#8b8a84">not a cause</text>
+<line x1="34" y1="586" x2="946" y2="586" stroke="#e6e5e0"/>
+<text x="34" y="615" font-size="17" font-weight="bold" fill="#0b0b0b">M6</text>
+<rect x="150" y="598" width="37.3" height="17" rx="4" fill="#2a78d6"/>
+<rect x="150" y="598" width="220" height="17" rx="4" fill="none" stroke="#e6e5e0"/>
+<text x="378" y="612" font-size="12" fill="#52514e" text-anchor="end">0.33</text>
+<text x="400" y="612" font-size="13" fill="#0b0b0b">0.00</text>
+<text x="470" y="612" font-size="13" fill="#0b0b0b">0.07</text>
+<text x="545" y="612" font-size="13" fill="#0b0b0b">-14.0</text>
+<rect x="660" y="600" width="66.2" height="13" rx="3" fill="#eb6834" opacity="0.85"/>
+<text x="800" y="612" font-size="13.5" fill="#8b8a84">not a cause</text>
+<line x1="34" y1="632" x2="946" y2="632" stroke="#e6e5e0"/>
+<text x="34" y="640" font-size="11.5" fill="#8b8a84">PN = probability of necessity, PS = probability of sufficiency, both over the designer's action set; responsibility = 1/(1+|W|) for the smallest witness coalition W; price in units of routing cost imposed on other nets.</text>
 </svg>
