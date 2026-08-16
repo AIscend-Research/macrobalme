@@ -1,0 +1,23 @@
+\begin{table}
+\caption{Closed-loop repair: DRC reduction after re-running place and route on the edits each attribution method recommends.}
+\label{tab:repair_summary}
+\begin{tabular}{llrrrrrr}
+\toprule
+method & group & red_A & red_B & wl_A & wl_B & worst & win_rate \\
+\midrule
+Oracle-ranked (ground truth) & bound & 36.21 & 36.21 & -3.73 & -3.73 & 28.20 & 100.00 \\
+HP responsibility & causal & 29.31 & 29.31 & -1.07 & -1.07 & 12.57 & 100.00 \\
+Counterfactual dDRC & causal & 28.98 & 28.98 & -2.74 & -2.74 & 12.57 & 100.00 \\
+Prob. of necessity & causal & 28.79 & 28.79 & -1.67 & -1.67 & 12.57 & 100.00 \\
+Random & control & 26.30 & 14.43 & -2.07 & -0.16 & 10.59 & 100.00 \\
+Shadow price & economic & 25.61 & 16.64 & -1.72 & -0.28 & 12.57 & 100.00 \\
+Grad-CAM & saliency & 24.70 & 10.82 & -2.26 & -1.35 & 2.73 & 100.00 \\
+Pigou externality & economic & 23.60 & 19.90 & -1.44 & -0.93 & 11.42 & 100.00 \\
+Input x gradient & saliency & 22.69 & 22.27 & -1.03 & -1.15 & 8.69 & 100.00 \\
+HP blame & causal & 22.19 & 22.19 & -1.09 & -1.09 & 8.69 & 100.00 \\
+Integrated grads & saliency & 21.37 & 13.80 & -0.71 & -1.29 & 8.66 & 100.00 \\
+Proximity heuristic & heuristic & 20.99 & 14.08 & -1.24 & -0.58 & 12.57 & 100.00 \\
+Shapley value & causal & 16.45 & 16.45 & -0.59 & -0.59 & 3.67 & 100.00 \\
+\bottomrule
+\end{tabular}
+\end{table}

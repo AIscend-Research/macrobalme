@@ -1,0 +1,22 @@
+\begin{table}
+\caption{Deletion/insertion faithfulness, measured by re-running place and route.}
+\label{tab:faithfulness}
+\begin{tabular}{llrrrr}
+\toprule
+method & group & drop_at_1 & drop_at_3 & del_auc & ins_auc \\
+\midrule
+Counterfactual dDRC & causal & 0.35 & 0.17 & 0.33 & 0.70 \\
+Grad-CAM & saliency & 0.03 & 0.14 & 0.20 & 0.66 \\
+HP blame & causal & 0.20 & 0.36 & 0.29 & 0.70 \\
+HP responsibility & causal & 0.25 & 0.32 & 0.33 & 0.60 \\
+Input x gradient & saliency & 0.14 & 0.28 & 0.28 & 0.78 \\
+Integrated grads & saliency & 0.13 & 0.38 & 0.31 & 0.69 \\
+Pigou externality & economic & 0.23 & 0.41 & 0.37 & 0.73 \\
+Prob. of necessity & causal & 0.26 & 0.25 & 0.30 & 0.64 \\
+Proximity heuristic & heuristic & 0.22 & 0.33 & 0.28 & 0.75 \\
+Random & control & 0.06 & 0.44 & 0.30 & 0.75 \\
+Shadow price & economic & 0.30 & 0.28 & 0.32 & 0.75 \\
+Shapley value & causal & 0.23 & 0.39 & 0.36 & 0.77 \\
+\bottomrule
+\end{tabular}
+\end{table}

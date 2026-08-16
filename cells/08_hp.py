@@ -86,8 +86,9 @@ def necessity_sufficiency(name):
 # ------------------------------------------- HP responsibility (Chockler & Halpern 2004)
 def responsibility(name, xy_actual=None, kmax=None, budget=4000):
     """resp(m) = 1/(1+|W|) for the smallest witness set W of *other* macros whose relocation
-    makes m pivotal:  phi holds under do(W=w) with m in place, and fails under do(W=w, m=off).
-    |W| = 0 is plain but-for causation, so resp = 1."""
+    makes m pivotal: phi still holds under do(W=w) with m where it is (AC2(a)), and fails under
+    do(W=w, m=x') for some site x' in m's action set (AC2(b)). |W| = 0 is plain but-for
+    causation, so resp = 1; a macro that needs two other things to move first gets 1/3."""
     d = DESIGNS[name]
     kmax = CFG.resp_max_witness if kmax is None else kmax
     rng = np.random.default_rng(CFG.seed + 7)
