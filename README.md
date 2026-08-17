@@ -28,6 +28,11 @@ affordable. Everything downstream touches it through one method, `evaluate(macro
 **Scale switch.** `QUICK = True` (the default) runs in ~4 minutes and produces every artifact.
 Set it to `False` for the reported numbers (~30–60 min on a Kaggle CPU kernel).
 
+**Caveat.** Three designs, a handful of ECO moves, and non-bit-reproducible CPU training: single
+methods move a few points between runs. The robust signal is between *groups* — causal/economic
+attributions and a proximity heuristic clearly above the random control on repair, gradient
+saliency at or below it on the diagnostic target.
+
 **Outputs.** `outputs/html/report.html` (self-contained), `figures/*.png|pdf`, `images/*.png`
 (bitmap die shots), `svg/*.svg` (verdict cards, causal model), `anim/repair_loop.gif`,
 `tables/*.csv|tex`, `data/interventions.csv`.

@@ -86,14 +86,21 @@ print(textwrap.dedent("""
 best = REPAIR[REPAIR.method != "Oracle-ranked (ground truth)"].iloc[0]
 sal = REPAIR[REPAIR.group == "saliency"]
 caus = REPAIR[REPAIR.group.isin(["causal", "economic"])]
+heur = REPAIR[REPAIR.group == "heuristic"]
+diag = RANK_DF.groupby("group").rho_total.mean()
 print("\n" + "=" * 86)
 print("RESULT".center(86))
 print("=" * 86)
 print(f"  real place & route runs           : {sum(o.calls for o in ORACLES.values()):,}")
 print(f"  surrogate counterfactual queries  : ~{len(DESIGNS)*CFG.shapley_perms*NMAX:,}")
+print("  -- diagnosis: rank correlation with the tool's own but-for effects --")
+for g in ["causal", "economic", "heuristic", "saliency", "control"]:
+    print(f"    {g:10s} : {diag.get(g, float('nan')):+.3f}")
+print("  -- repair: DRC removed after real re-runs --")
 print(f"  best attribution                  : {best.method}  ({best.red_A:.1f}% DRC removed)")
 print(f"  causal + economic methods (mean)  : {caus.red_A.mean():.1f}% DRC removed")
 print(f"  gradient saliency (mean)          : {sal.red_A.mean():.1f}% DRC removed")
+print(f"  proximity heuristic               : {heur.red_A.mean():.1f}% DRC removed")
 print(f"  random control                    : {float(REPAIR[REPAIR.method=='Random'].red_A.iloc[0]):.1f}%")
 print(f"  oracle-ranked ground truth        : "
       f"{float(REPAIR[REPAIR.method=='Oracle-ranked (ground truth)'].red_A.iloc[0]):.1f}%")

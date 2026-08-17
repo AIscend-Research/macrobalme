@@ -92,17 +92,19 @@ fig, ax = plt.subplots(figsize=(9.5, 4.2))
 piv2 = RANK_DF.pivot_table(index="method", values=["rho_total", "rho_local", "rho_region"],
                            aggfunc="mean").reindex(ORDER)
 x = np.arange(len(ORDER)); w = .27
-for i, (col, lab, alpha) in enumerate([("rho_total", "vs. total DRC effect", 1.0),
-                                       ("rho_local", "vs. best ECO move", .72),
-                                       ("rho_region", "vs. per-hotspot effect", .45)]):
+targets = [("rho_total", "vs. total DRC effect", 1.0), ("rho_local", "vs. best ECO move", .72),
+           ("rho_region", "vs. per-hotspot effect", .45)]
+for i, (col, lab, alpha) in enumerate(targets):
     ax.bar(x + (i - 1) * w, piv2[col], w * .92,
            color=[METHOD_COLOR[m] for m in ORDER], alpha=alpha,
-           label=lab, edgecolor=SURFACE, linewidth=1.2)
+           edgecolor=SURFACE, linewidth=1.2)
+# colour carries the method group, opacity carries the target -- so say so in neutral ink
+handles = [plt.Rectangle((0, 0), 1, 1, fc=INK2, alpha=a, ec=SURFACE) for _, _, a in targets]
 ax.axhline(0, color=INK2, lw=1)
 ax.set(xticks=x, ylabel="Spearman rank correlation", title="Does the attribution agree with the tool?")
 ax.set_xticklabels([MSHORT[m] for m in ORDER], rotation=32, ha="right")
 for t, m in zip(ax.get_xticklabels(), ORDER): t.set_color(METHOD_COLOR[m])
-ax.legend(ncol=3, fontsize=8)
+ax.legend(handles, [t[1] for t in targets], ncol=3, fontsize=8)
 ART["fig4"] = save_fig(fig, "fig4_rank_correlation")
 
 # ---- F5: deletion curves, measured with real re-runs -----------------------------------

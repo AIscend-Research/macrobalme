@@ -25,7 +25,7 @@ def table_html(df, caption, fmt="{:.3f}"):
     d2 = df.copy()
     for c in d2.columns:
         if d2[c].dtype.kind == "f": d2[c] = d2[c].map(lambda v: fmt.format(v))
-    return (f'<figure><table>{d2.to_html(index=False, border=0)}</table>'
+    return (f'<figure><div class="tbl">{d2.to_html(index=False, border=0)}</div>'
             f'<figcaption>{caption}</figcaption></figure>')
 
 
@@ -41,6 +41,40 @@ latex_table(piv2.reset_index().round(3), "rank_correlation", "Rank correlation b
             "attribution and the tool's own counterfactual effects.")
 latex_table(FAITH.round(3), "faithfulness", "Deletion/insertion faithfulness, measured by "
             "re-running place and route.")
+
+# ---- read the findings off the numbers, so the prose cannot drift from the run ----------
+GRP = lambda g: RANK_DF[RANK_DF.group.isin(g)].groupby("method").rho_total.mean()
+diag_cause = GRP(["causal", "economic"]); diag_sal = GRP(["saliency"])
+diag_heur = GRP(["heuristic"]); diag_rand = GRP(["control"])
+rep = REPAIR.set_index("method")
+rep_cause = rep[rep.group.isin(["causal", "economic"])].red_A
+rep_sal = rep[rep.group == "saliency"].red_A
+rep_heur = rep[rep.group == "heuristic"].red_A
+bound = float(rep.loc["Oracle-ranked (ground truth)", "red_A"])
+rnd_rep = float(rep.loc["Random", "red_A"])
+FINDING = (
+    f"<p><strong>On the diagnostic question &mdash; which macro is responsible for this "
+    f"failure &mdash; the causal and economic attributions win outright.</strong> Their rank "
+    f"correlation with the tool's own but-for effects averages "
+    f"{diag_cause.mean():+.2f} (best: {diag_cause.idxmax()}, {diag_cause.max():+.2f}), against "
+    f"{diag_sal.mean():+.2f} for gradient saliency (best {diag_sal.max():+.2f}, worst "
+    f"{diag_sal.min():+.2f}) and {diag_rand.mean():+.2f} for the random control. Saliency is not "
+    f"merely weaker here; on this target it carries almost no signal, which is what the "
+    f"correlational/counterfactual distinction predicts.</p>"
+    f"<p><strong>On the repair action, the picture is more interesting and less flattering to "
+    f"a clean story.</strong> With a budget of {CFG.repair_topk} ECO moves, causal and economic "
+    f"rankings remove {rep_cause.mean():.1f}% of DRC markers on average (best "
+    f"{rep_cause.idxmax()} at {rep_cause.max():.1f}%) against {rnd_rep:.1f}% for the random "
+    f"control and {rep_sal.mean():.1f}% for saliency &mdash; but the proximity heuristic, which "
+    f"is simply <em>move whatever macro sits in the red</em>, reaches {rep_heur.max():.1f}%, "
+    f"close to the {bound:.1f}% of the oracle-ranked bound. For an ECO-sized local move that is "
+    f"not surprising: proximity is a decent proxy for <em>who can be relieved by moving a "
+    f"little</em>, even though it is a poor proxy for <em>who is to blame</em> "
+    f"({diag_heur.mean():+.2f} on the diagnostic target). The honest claim this run supports is "
+    f"therefore narrower than 'causal beats everything': responsibility and price answer the "
+    f"attribution question that saliency cannot answer at all, and they convert into repairs "
+    f"that beat random and beat saliency &mdash; while a cheap spatial heuristic remains a "
+    f"strong baseline for local repair specifically, and belongs in any honest table.</p>")
 
 best = REPAIR[REPAIR.method != "Oracle-ranked (ground truth)"].iloc[0]
 sal_best = REPAIR[REPAIR.group == "saliency"].red_A.max()
@@ -75,6 +109,7 @@ strong{color:var(--ink)}
 figure{margin:1.8rem 0}
 figure img{width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:#fff}
 figcaption{font-size:.86rem;color:var(--ink3);margin-top:.55rem}
+.tbl{overflow-x:auto}
 .svg{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:#fff;padding:.6rem}
 .svg svg{max-width:100%;height:auto}
 table{border-collapse:collapse;width:100%;font-size:.86rem;font-variant-numeric:tabular-nums}
@@ -87,7 +122,7 @@ code{background:#f1f0ec;padding:.1rem .3rem;border-radius:4px;font-size:.88em}
  border:1px solid var(--line);color:var(--ink3);margin-right:.3rem}
 """
 
-H = [f"<style>{CSS}</style>", "<main>",
+H = ["<title>Who's to Blame?</title>", f"<style>{CSS}</style>", "<main>",
      "<span class='tag'>reproduction notebook</span>"
      "<span class='tag'>actual causation</span><span class='tag'>congestion pricing</span>",
      "<h1>Who's to blame?</h1>",
@@ -140,6 +175,7 @@ H = [f"<style>{CSS}</style>", "<main>",
              "per-hotspot effect."),
      img_tag(ART["fig5"], "Park the accused: DRC markers surviving after the top-k blamed "
              "macros are moved to their default sites and the block is re-placed and re-routed."),
+     "<h2>What we found</h2>", FINDING,
      "<h2>The table this paper is for</h2>",
      "<p>A designer has a budget of ECO macro moves. Each method nominates which macros to "
      "move; every method is handed the same candidate sites and the same verification budget, "
@@ -179,7 +215,14 @@ H = [f"<style>{CSS}</style>", "<main>",
      "a cause you cannot act on is not a useful cause.</li>"
      "<li>The surrogate is fitted per run on a few hundred interventions. Where it is wrong, "
      "the attributions are wrong, which is exactly why every headline claim is re-verified with "
-     "real runs rather than read off the model.</li></ul>",
+     "real runs rather than read off the model.</li>"
+     "<li>Three designs and a handful of ECO moves is a small sample, and multi-threaded CPU "
+     "training is not bit-reproducible: repeated runs of this notebook move individual methods "
+     "by a few points in the repair table, which is the same order as the gaps between "
+     "neighbouring rows. The gaps that survive that noise are the ones between "
+     "<em>groups</em> &mdash; causal/economic and the proximity heuristic above the random "
+     "control, gradient saliency at or below it on the diagnostic target &mdash; and those are "
+     "the only claims made here.</li></ul>",
      "</main>"]
 
 with open(P("html", "report.html"), "w") as f: f.write("\n".join(H))
