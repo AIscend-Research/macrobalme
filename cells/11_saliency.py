@@ -46,7 +46,7 @@ if HAS_TORCH:
 else:                                                          # pragma: no cover
     def gradcam(name, macro_xy): return unet_predict(name, macro_xy)[0]
     def input_grad(name, macro_xy, channel=0):
-        return _W[:, :].sum(1).reshape(CH_IN, *X_ALL.shape[-2:])[channel] * unet_inputs(name, macro_xy)[channel]
+        return _W[:-1, :].sum(1).reshape(CH_IN, *X_ALL.shape[-2:])[channel] * unet_inputs(name, macro_xy)[channel]
     def integrated_grad(name, macro_xy, steps=32, channel=0): return input_grad(name, macro_xy, channel)
 
 
